@@ -1,0 +1,120 @@
+<!DOCTYPE HTML>
+<html ng-app="helloWorld" lan="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous">
+    </script>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous">
+    </script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.js"></script>
+
+    <script src="/js/main.js"></script>
+    <link href="/css/main.css" rel="stylesheet">
+
+</head>
+
+<body ng-controller="helloController">
+
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <div class="navbar-brand">Product Overview</div>
+            </div>
+
+            <div class="collapse navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="navbar-form form-group">
+                        <input type="text" class="form-control" placeholder="Filter" ng-model="productFilter">
+                    </li>
+                    <li>
+                        <p class="navbar-text">Items: {{ itemCount() }}</p>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="list-group">
+            <button type="button" class="list-group-item" ng-repeat="product in productList | filter:productFilter" ng-click="selectProduct(product)">
+					<div class="row vertical-align">
+						<div class="col-sm-8 top">
+							<h4>{{ product.ProductName }}</h4>
+							<p>{{ product.QuantityPerUnit }}</p>
+						</div>
+						<div class="col-sm-3 text-right top">
+							<h4>{{ product.UnitPrice | currency:"€" }} <small class="text-muted">EUR</small></h4>
+							<p ng-class="product.Discontinued ? 'discontinued' : 'available'">
+								{{product.Discontinued | discontinued}}
+							</p>
+						</div>
+						<div class="col-sm-1 center">
+						    <span class="glyphicon glyphicon-chevron-right pull-right" aria-hidden="true"></span>
+						</div>
+					</div>
+				</button>
+        </div>
+    </div>
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="product-detail">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+                    <h4 class="modal-title">Product Detail - {{selectedProduct.ProductName}}</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Product Name</label>
+                            <div class="col-sm-9">
+                                <p class="form-control-static">{{selectedProduct.ProductName}}</p>
+                            </div>
+                            <label class="col-sm-3 control-label">Unit Price</label>
+                            <div class="col-sm-9">
+                                <p class="form-control-static">{{selectedProduct.UnitPrice | currency:"€"}}</p>
+                            </div>
+                            <label class="col-sm-3 control-label">Status</label>
+                            <div class="col-sm-9">
+                                <p class="form-control-static" ng-class="{discontinued: selectedProduct.Discontinued}">
+                                    {{selectedProduct.Discontinued | discontinued }}
+                                </p>
+                            </div>
+                            <label class="col-sm-3 control-label">Category</label>
+                            <div class="col-sm-9">
+                                <p class="form-control-static">{{selectedProduct.CategoryID}}</p>
+                            </div>
+                            <label class="col-sm-3 control-label">Units In Stock</label>
+                            <div class="col-sm-9">
+                                <p class="form-control-static">{{selectedProduct.UnitsInStock}}</p>
+                            </div>
+                            <label class="col-sm-3 control-label">Order Amount</label>
+                            <div class="col-sm-6">
+                                <input type="number" class="form-control" id="orderAmount" ng-model="orderAmount" placeholder="Enter number of units to order" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" ng-click="orderItem()">Order</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+</body>
+
+</html>
